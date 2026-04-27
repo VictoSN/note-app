@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";  
 import './NoteEditor.css';        
 
-async function loadNotes(noteId) {
-
-}
-
 function NoteEditor({ note, setNote }) {
     const [noteTitle, setNoteTitle] = useState("New Note");
     const [noteFavorite, setNoteFavorite] = useState(false);
@@ -12,21 +8,14 @@ function NoteEditor({ note, setNote }) {
     const [displayMode, setDisplayMode] = useState(false);
     const [noteContent, setNoteContent] = useState("");
 
-
     useEffect(() => {
-        async function fetchData() {
-            if(note._id != null && note._id != undefined) {
-                const res = await fetch(`http://localhost:3000/notes/${note._id}`);
-                const data = await res.json();
-                setNoteTitle(data.title);    
-                setNoteFavorite(data.favorite);    
-                setNoteCategory(data.category);    
-                setNoteContent(data.content);    
-            }
-        }
+        if(!note) return;
 
-        fetchData();
-    }, []);
+        setNoteTitle(note.title || "New Note");
+        setNoteFavorite(note.favorite || false);
+        setNoteCategory(note.category || "");
+        setNoteContent(note.content || "");
+    }, [note]);
 
     const favoriteNote = () => {
         setNoteFavorite(prev => !prev);
@@ -36,30 +25,63 @@ function NoteEditor({ note, setNote }) {
         setNoteCategory(prev => "Test");
     }
 
+    // Save the note to db and update to parent
     const saveNote = async () => {
-        await fetch(`http://localhost:3000/notes/${note._id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                    title: noteTitle,
-                    favorite: noteFavorite,
-                    category: noteCategory,
-                    content: noteContent
-            })
-        });
-    }
+        try {
+            if(note?._id) {
+                await fetch(`http://localhost:3000/notes/${note?._id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                            title: noteTitle,
+                            favorite: noteFavorite,
+                            category: noteCategory,
+                            content: noteContent
+                    })
+                });
+            } else {
+                const res = await fetch(`http://localhost:3000/notes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                            title: noteTitle,
+                            favorite: noteFavorite,
+                            category: noteCategory,
+                            content: noteContent
+                    })
+                });
+    
+                const newNote = await res.json();
+                setNote(newNote);
+                return;
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
+    // Delete from database and clear the editor
     const removeNote = async () => {
-        await fetch(`http://localhost:3000/notes/${note._id}`, { method: 'DELETE' });
-    }
+        try {
+            if(note?._id) {
+                await fetch(`http://localhost:3000/notes/${note?._id}`, { method: 'DELETE' });
+            };
 
-    const createNote = async () => {
-        const res = await fetch('http://localhost:3000/notes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: null
-        });
-    }
+            createNote();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // Create new note and select it
+    const createNote = () => {
+        setNote(null);
+
+        setNoteTitle("New Note");
+        setNoteFavorite(false);
+        setNoteCategory("");
+        setNoteContent("");
+    };
 
     const duplicateNote = () => {
 
@@ -67,7 +89,7 @@ function NoteEditor({ note, setNote }) {
 
     const changeDisplayMode = () => {
         setDisplayMode(prev => !prev);
-    }
+    };
 
     return (
         <div id="NoteEditor">

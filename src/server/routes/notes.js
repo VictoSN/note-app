@@ -24,8 +24,8 @@ router.delete('/:id', async(req, res) => {
 })
 
 router.patch('/:id', async(req, res) => {
-    await Note.findByIdAndUpdate(req.params.id, req.body);
-    res.json({ success: true });
+    const update = await Note.findByIdAndUpdate(req.params.id, req.body, { returnDocument: "after" });
+    res.json(update);
 })
 
 export default router;
