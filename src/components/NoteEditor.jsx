@@ -17,12 +17,44 @@ function NoteEditor({ note, setNote }) {
         setNoteContent(note.content || "");
     }, [note]);
 
-    const favoriteNote = () => {
-        setNoteFavorite(prev => !prev);
+    const favoriteNote = async () => {
+        const newFavorite = !noteFavorite;
+        setNoteFavorite(newFavorite);
+        setNote({ ...note, favorite: newFavorite });
+
+        try {
+            if(note?._id) {
+                await fetch(`http://localhost:3000/notes/${note?._id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        favorite: newFavorite
+                    })
+                })
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    const categoryNote = () => {
-        setNoteCategory(prev => "Test");
+    const categoryNote = async () => {
+        const newCategory = ""
+        setNoteCategory(newCategory);
+        setNote({ ...note, category: newCategory });
+
+        try {
+            if(note?._id) {
+                await fetch(`http://localhost:3000/notes/${note?._id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        category: noteCategory
+                    })
+                })
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     // Save the note to db and update to parent
@@ -38,6 +70,12 @@ function NoteEditor({ note, setNote }) {
                             category: noteCategory,
                             content: noteContent
                     })
+                });
+
+                setNote({ 
+                    ...note, 
+                    title: noteTitle,
+                    content: noteContent
                 });
             } else {
                 const res = await fetch(`http://localhost:3000/notes`, {
@@ -83,8 +121,24 @@ function NoteEditor({ note, setNote }) {
         setNoteContent("");
     };
 
-    const duplicateNote = () => {
-
+    const duplicateNote = async () => {
+        try {
+            const res = await fetch(`http://localhost:3000/notes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                        title: noteTitle,
+                        favorite: noteFavorite,
+                        category: noteCategory,
+                        content: noteContent
+                })
+            });
+    
+            const newNote = await res.json();
+            setNote(newNote);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     const changeDisplayMode = () => {
