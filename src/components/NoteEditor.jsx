@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";  
 import './NoteEditor.css';        
 
-function NoteEditor({ currentNote, setNote }) {
-    const [noteTitle, setNoteTitle] = useState("New Note");
+function NoteEditor({ currentNote, setNote, onDelete }) {
+    const [noteTitle, setNoteTitle] = useState("");
     const [noteFavorite, setNoteFavorite] = useState(false);
     const [noteCategory, setNoteCategory] = useState("");
-    const [displayMode, setDisplayMode] = useState(false);
     const [noteContent, setNoteContent] = useState("");
 
     // Sync local state when a different note is selected
     useEffect(() => {
-        if(!currentNote) return;
+        if(!currentNote) {
+            // Reset editor when null
+            setNoteTitle("")
+            setNoteFavorite(false)
+            setNoteCategory("")
+            setNoteContent("")
+            return
+        }
 
-        setNoteTitle(currentNote.title || "New Note");
+        setNoteTitle(currentNote.title || "");
         setNoteFavorite(currentNote.favorite || false);
         setNoteCategory(currentNote.category || "");
         setNoteContent(currentNote.content || "");
@@ -87,9 +93,10 @@ function NoteEditor({ currentNote, setNote }) {
         try {
             if(currentNote?._id) {
                 await fetch(`http://localhost:3000/notes/${currentNote?._id}`, { method: 'DELETE' });
-            };
-
-            createNote();
+                onDelete(currentNote._id);
+            } else {
+                createNote();
+            }
         } catch (err) {
             console.log(err);
         }
@@ -99,7 +106,7 @@ function NoteEditor({ currentNote, setNote }) {
     const createNote = () => {
         setNote(null);
 
-        setNoteTitle("New Note");
+        setNoteTitle("");
         setNoteFavorite(false);
         setNoteCategory("");
         setNoteContent("");
@@ -140,7 +147,6 @@ function NoteEditor({ currentNote, setNote }) {
                 <button onClick={removeNote}>Delete</button>
                 <button onClick={createNote}>New</button>
                 <button onClick={duplicateNote}>Duplicate</button>
-                <button onClick={changeDisplayMode}>{displayMode ? "Light" : "Dark"}</button>
             </section>
             <textarea className="textContent" value={noteContent} onChange={(e) => setNoteContent(e.target.value)} placeholder='Insert note here'></textarea>
         </div>

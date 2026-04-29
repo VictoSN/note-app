@@ -7,7 +7,10 @@ function NoteList({ notes, setNote }) {
        <div id="NoteList">
             {notes.map((notes) => (
                 <div className="noteCard" onClick={() => setNote(notes)} key ={notes._id}>
-                    <div className="noteCardDetail">{notes.title} {notes.category}</div>
+                    <div className="noteCardDetail">
+                        <h1>{notes.title}</h1>
+                        <h2>{notes.category}</h2>
+                    </div>
                     {notes.favorite ? "⭐" : ""}
                 </div>
             ))}

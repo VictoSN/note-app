@@ -17,6 +17,26 @@ function App() {
   // Categories are a set of note.category
   const categories = [...new Set(notes.map(n => n.category).filter(Boolean))]
 
+  const updateNote = (updatedNote) => {
+    if(!updatedNote) {
+      // create / remove note, just unselect it
+      setCurrentNote(null)
+      return
+    }
+    if(notes.find(n => n._id === updatedNote._id)) {
+      // existing note, then update it
+      setNotes(prev => prev.map(n => n._id === updatedNote?._id ? updatedNote : n));
+    } else {
+      // new note (add/duplicate), add it to the note list
+      setNotes(prev => [...prev, updatedNote]);
+    }
+  }
+
+  const deleteNote = (deleteId) => {
+    setNotes(prev => prev.filter(n => n._id !== deleteId));
+    setCurrentNote(null)
+  }
+
   // Fetch the data from the database to stay in sync
   useEffect(() => {
     fetch('http://localhost:3000/notes')
@@ -32,7 +52,7 @@ function App() {
           filterCategory={filterCategory} setFilterCategory={setFilterCategory} />
         <NoteList notes={filteredNotes} setNote={setCurrentNote} />
       </div>
-      <NoteEditor currentNote={currentNote} setNote={setCurrentNote} />
+      <NoteEditor currentNote={currentNote} setNote={updateNote} onDelete={deleteNote} />
     </div>
   )
 }

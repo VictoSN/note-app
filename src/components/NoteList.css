@@ -1,0 +1,31 @@
+#NoteList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.noteCard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px;
+}
+
+.noteCardDetail {
+    display: flex;
+    flex-direction: column;
+}
+
+.noteCardDetail h1, h2 {
+    margin: 2px;
+}
+
+.noteCardDetail h1 {
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.noteCardDetail h2 {
+    font-size: 0.8em;
+    font-weight: 300;
+}
