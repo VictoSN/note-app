@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./NoteList.css";
 
 function NoteList({ notes, setNote }) {    
+    // When a note card is clicked, it will update the note editor by using setNote(notes)
     return (
        <div id="NoteList">
             {notes.map((notes) => (

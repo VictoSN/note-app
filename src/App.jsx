@@ -14,13 +14,15 @@ function App() {
   .filter(note => note.title.toLowerCase().includes(search.toLowerCase()))
   .filter(note => filterCategory ? note.category === filterCategory : true);
 
+  // Categories are a set of note.category
   const categories = [...new Set(notes.map(n => n.category).filter(Boolean))]
 
+  // Fetch the data from the database to stay in sync
   useEffect(() => {
     fetch('http://localhost:3000/notes')
       .then(res => res.json())
       .then(data => setNotes(data))
-  })
+  }, [])
 
   return (
     <div id="mainDiv">

@@ -8,6 +8,7 @@ function NoteEditor({ currentNote, setNote }) {
     const [displayMode, setDisplayMode] = useState(false);
     const [noteContent, setNoteContent] = useState("");
 
+    // Sync local state when a different note is selected
     useEffect(() => {
         if(!currentNote) return;
 
@@ -17,6 +18,7 @@ function NoteEditor({ currentNote, setNote }) {
         setNoteContent(currentNote.content || "");
     }, [currentNote]);
 
+    // Update the UI then persist to db
     const favoriteNote = async () => {
         const newFavorite = !noteFavorite;
         setNoteFavorite(newFavorite);
@@ -37,27 +39,7 @@ function NoteEditor({ currentNote, setNote }) {
         }
     }
 
-    const categoryNote = async () => {
-        const newCategory = ""
-        setNoteCategory(newCategory);
-        setNote({ ...currentNote, category: newCategory });
-
-        try {
-            if(currentNote?._id) {
-                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        category: noteCategory
-                    })
-                })
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    // Save the note to db and update to parent
+    // Save to db. PATCH if exist, POST if not exist.
     const saveNote = async () => {
         try {
             if(currentNote?._id) {
@@ -72,6 +54,7 @@ function NoteEditor({ currentNote, setNote }) {
                     })
                 });
 
+                // Update parent so noteList can immediately change
                 setNote({ 
                     ...currentNote, 
                     title: noteTitle,
@@ -99,7 +82,7 @@ function NoteEditor({ currentNote, setNote }) {
         }
     };
 
-    // Delete from database and clear the editor
+    // Delete from database and clear the editor to blank
     const removeNote = async () => {
         try {
             if(currentNote?._id) {
@@ -112,7 +95,7 @@ function NoteEditor({ currentNote, setNote }) {
         }
     };
 
-    // Create new note and select it
+    // Reset the editor to blank
     const createNote = () => {
         setNote(null);
 
@@ -122,6 +105,7 @@ function NoteEditor({ currentNote, setNote }) {
         setNoteContent("");
     };
 
+    // POST current content as a new one
     const duplicateNote = async () => {
         try {
             const res = await fetch(`http://localhost:3000/notes`, {

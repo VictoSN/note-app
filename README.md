@@ -1,16 +1,50 @@
-# React + Vite
+# note-app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## A note-app that is created using MERN tech stack
 
-Currently, two official plugins are available:
+a MongoDB, Express, React, Node javascript project that is utilized for the following functions:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Adding / Deleting Notes
+2. Categories and Favorites Notes
+3. Stored in MongoAtlas
+4. Used REST API along with Express and Node.js
 
-## React Compiler
+## How it works
+- Contains 3 components (Search, List, Editor)
+- Any updates done to the notes is then updated to the database
+- The UI is re-rendered whenever any changes are detected
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Screenshots
+### Main Interface
+![Main Interface](images/Main.png)
 
-## Expanding the ESLint configuration
+### Example-Editor
+![Note Editor](images/Example-Editor.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Example-Search
+![Search](images/Example-Search.png)
+
+## How to run
+1. Clone the repo
+2. Run:
+
+```bash
+npm install
+```
+
+3. Create .env with:
+
+```bash
+MONGO_URI=connection_string
+```
+
+4. Run:
+
+```bash
+node src/server/index.js
+```
+
+5. Run:
+```bash
+npm run dev
+```

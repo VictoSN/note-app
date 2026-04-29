@@ -6,6 +6,7 @@ function SearchBar({ search, setSearch, categories, filterCategory, setFilterCat
         e.preventDefault();
     }
 
+    // Update the search and category using the setSearch and setFilterCategory.
     return (
         <div id="SearchBar">
             <form onSubmit={handleSubmit}>
