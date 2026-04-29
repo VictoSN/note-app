@@ -75,6 +75,7 @@ function NoteEditor({ currentNote, setNote }) {
                 setNote({ 
                     ...currentNote, 
                     title: noteTitle,
+                    category: noteCategory,
                     content: noteContent
                 });
             } else {
@@ -150,7 +151,7 @@ function NoteEditor({ currentNote, setNote }) {
             <section className="controlSection">
                 <input value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Title'></input>
                 <button onClick={favoriteNote}>{noteFavorite ? "Unfavorite" : "Favorite"}</button>
-                <select></select>
+                <input value={noteCategory} onChange={(e) => setNoteCategory(e.target.value)} placeholder="Category"></input>
                 <button onClick={saveNote}>Save</button>
                 <button onClick={removeNote}>Delete</button>
                 <button onClick={createNote}>New</button>
