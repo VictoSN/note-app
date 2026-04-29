@@ -5,7 +5,7 @@ import yellowStar from "../assets/star-yellow.svg";
 import moon from "../assets/moon.svg";
 import sun from "../assets/sun.svg";
 
-function NoteEditor({ currentNote, setNote, onDelete }) {
+function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
     const [noteTitle, setNoteTitle] = useState("");
     const [noteFavorite, setNoteFavorite] = useState(false);
     const [noteCategory, setNoteCategory] = useState("");
@@ -175,12 +175,17 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
     return (
         <div id="NoteEditor">
             <section className="controlSection">
-                <div className="controlDiv">
-                    <input value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Title'></input>
-                    <button className="favButton" onClick={favoriteNote}>
-                        <img className="svg" src={noteFavorite ? yellowStar : whiteStar} alt="star"></img>
-                    </button>
-                    <input value={noteCategory} onChange={(e) => setNoteCategory(e.target.value)} placeholder="Category"></input>
+                <div className="controlDiv mobileControlDiv">
+                    <div className="mobileSubDiv">
+                        <button className="bckButton" onClick={() => setMobileView("list")}>←</button>
+                        <input value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Title'></input>
+                    </div>
+                    <div className="mobileSubDiv">
+                        <button className="favButton" onClick={favoriteNote}>
+                            <img className="svg" src={noteFavorite ? yellowStar : whiteStar} alt="star"></img>
+                        </button>
+                        <input value={noteCategory} onChange={(e) => setNoteCategory(e.target.value)} placeholder="Category"></input>
+                    </div>
                 </div>
                 
                 <div className="controlDiv">

@@ -15,3 +15,12 @@
 }
 
 #rightColumn { flex: 1; }
+
+@media (max-width: 767px) {
+  .hidden-mobile { display: none !important; }
+  #leftColumn { width: 100%; min-width: 100%; }
+}
+
+@media (min-width: 768px) {
+  #leftColumn, rightColumn { display: flex! important; }
+}

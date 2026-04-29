@@ -10,6 +10,12 @@ function App() {
   const [currentNote, setCurrentNote] = useState(null);
   const [filterCategory, setFilterCategory] = useState("");
   const [showFavorites, setShowFavorites] = useState(false);
+  const [mobileView, setMobileView] = useState("list") // "list" | "editor"
+
+  const selectNote = (note) => {
+    setCurrentNote(note);
+    setMobileView("editor");
+  }
 
   const filteredNotes = notes
   .filter(note => note.title.toLowerCase().includes(search.toLowerCase()))
@@ -48,15 +54,19 @@ function App() {
 
   return (
     <div id="mainDiv">
-        <div id="leftColumn">
+        <div id="leftColumn" className={mobileView === "editor" ? "hidden-mobile" : ""}>          
           <SearchBar 
             search={search} setSearch={setSearch} categories={categories}
             filterCategory={filterCategory} setFilterCategory={setFilterCategory} 
-            showFavorites={showFavorites} setShowFavorites={setShowFavorites} />
-          <NoteList notes={filteredNotes} setNote={setCurrentNote} />
+            showFavorites={showFavorites} setShowFavorites={setShowFavorites} 
+          />
+          <NoteList notes={filteredNotes} setNote={selectNote} />
         </div>
-        <div id="rightColumn">
-          <NoteEditor currentNote={currentNote} setNote={updateNote} onDelete={deleteNote} />
+        <div id="rightColumn" className={mobileView === "list" ? "hidden-mobile" : ""}>
+          <NoteEditor
+            currentNote={currentNote} setNote={updateNote} 
+            onDelete={deleteNote} setMobileView={setMobileView}
+          />
         </div>
     </div>
   )
