@@ -2,17 +2,19 @@
 
 ## A note-app that is created using MERN tech stack
 
-a MongoDB, Express, React, Node javascript project that is utilized for the following functions:
+a MongoDB, Express, React, Node (MERN) javascript project that is utilized for the following functions:
 
 1. Adding / Deleting Notes
 2. Categories and Favorites Notes
-3. Stored in MongoAtlas
-4. Used REST API along with Express and Node.js
+3. Light & Dark UIs
+4. Stored in MongoAtlas
+5. Used REST API along with Express and Node.js
 
 ## How it works
 - Contains 3 components (Search, List, Editor)
 - Any updates done to the notes is then updated to the database
 - The UI is re-rendered whenever any changes are detected
+- Stores UI preferences in localStorage
 
 ## Screenshots
 ### Main Interface

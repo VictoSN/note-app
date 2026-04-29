@@ -10,7 +10,11 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
     const [noteFavorite, setNoteFavorite] = useState(false);
     const [noteCategory, setNoteCategory] = useState("");
     const [noteContent, setNoteContent] = useState("");
-    const [darkMode, setDarkMode] = useState(false);
+
+    // localStorage stores strings, need some logic to avoid permanent dark mode
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem("displayMode") === "true";
+    });
 
     // change the body's class into dark mode
     useEffect(() => {
@@ -20,12 +24,6 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
     useEffect(() => {
         localStorage.setItem("displayMode", darkMode);
     }, [darkMode]);
-
-    // localStorage stores strings, need some logic to avoid permanent dark mode
-    useEffect(() => {
-        const saved = localStorage.getItem("displayMode");
-        if (saved !== null) setDarkMode(saved === "true");
-    }, []);
 
     // Sync local state when a different note is selected
     useEffect(() => {
@@ -190,7 +188,7 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
                     <button className="delButton" onClick={removeNote}>Delete</button>
                     <button className="newButton" onClick={createNote}>New</button>
                     <button className="dupButton" onClick={duplicateNote}>Duplicate</button>
-                    <button className={darkMode ? "darkButton" : "lightButton"} onClick={() => setDarkMode(!darkMode)}>
+                    <button className="modButton" onClick={() => setDarkMode(!darkMode)}>
                         <img className="svg" src={darkMode ? moon : sun} alt="Dark mode logo"></img>
                     </button>
                 </div>

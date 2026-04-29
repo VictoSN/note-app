@@ -9,6 +9,7 @@
 
 #SearchBar input, #SearchBar select { 
     width: 100%; 
+    height: 32px;
     padding: 6px 10px; 
 
     border: 1px solid var(--input-border); 
@@ -30,9 +31,23 @@
 
 .favFilter { 
     flex: 1;
-    height: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    padding: 8px 12px; 
+    border-radius: 6px; 
+    height: 32px;
+
     cursor: pointer;
+    transition: filter 0.2s;
+
+    background-color: transparent;
+    border: 1px solid var(--input-border);
 }
+
+.favFilter:hover { filter: brightness(85%); }
 
 .svg {
     width: 22px;

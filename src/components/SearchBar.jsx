@@ -15,6 +15,7 @@ function SearchBar({ search, setSearch, categories, filterCategory, setFilterCat
                 </select>
                 <label className="favFilter">
                     <input
+                        className="favButton"
                         type="checkbox"
                         checked={showFavorites}
                         onChange={(e) => setShowFavorites(e.target.checked)}
