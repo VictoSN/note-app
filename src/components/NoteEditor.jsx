@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";  
 import './NoteEditor.css';        
 
-function NoteEditor({ note, setNote }) {
+function NoteEditor({ currentNote, setNote }) {
     const [noteTitle, setNoteTitle] = useState("New Note");
     const [noteFavorite, setNoteFavorite] = useState(false);
     const [noteCategory, setNoteCategory] = useState("");
@@ -9,22 +9,22 @@ function NoteEditor({ note, setNote }) {
     const [noteContent, setNoteContent] = useState("");
 
     useEffect(() => {
-        if(!note) return;
+        if(!currentNote) return;
 
-        setNoteTitle(note.title || "New Note");
-        setNoteFavorite(note.favorite || false);
-        setNoteCategory(note.category || "");
-        setNoteContent(note.content || "");
-    }, [note]);
+        setNoteTitle(currentNote.title || "New Note");
+        setNoteFavorite(currentNote.favorite || false);
+        setNoteCategory(currentNote.category || "");
+        setNoteContent(currentNote.content || "");
+    }, [currentNote]);
 
     const favoriteNote = async () => {
         const newFavorite = !noteFavorite;
         setNoteFavorite(newFavorite);
-        setNote({ ...note, favorite: newFavorite });
+        setNote({ ...currentNote, favorite: newFavorite });
 
         try {
-            if(note?._id) {
-                await fetch(`http://localhost:3000/notes/${note?._id}`, {
+            if(currentNote?._id) {
+                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -40,11 +40,11 @@ function NoteEditor({ note, setNote }) {
     const categoryNote = async () => {
         const newCategory = ""
         setNoteCategory(newCategory);
-        setNote({ ...note, category: newCategory });
+        setNote({ ...currentNote, category: newCategory });
 
         try {
-            if(note?._id) {
-                await fetch(`http://localhost:3000/notes/${note?._id}`, {
+            if(currentNote?._id) {
+                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -60,8 +60,8 @@ function NoteEditor({ note, setNote }) {
     // Save the note to db and update to parent
     const saveNote = async () => {
         try {
-            if(note?._id) {
-                await fetch(`http://localhost:3000/notes/${note?._id}`, {
+            if(currentNote?._id) {
+                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -73,7 +73,7 @@ function NoteEditor({ note, setNote }) {
                 });
 
                 setNote({ 
-                    ...note, 
+                    ...currentNote, 
                     title: noteTitle,
                     content: noteContent
                 });
@@ -101,8 +101,8 @@ function NoteEditor({ note, setNote }) {
     // Delete from database and clear the editor
     const removeNote = async () => {
         try {
-            if(note?._id) {
-                await fetch(`http://localhost:3000/notes/${note?._id}`, { method: 'DELETE' });
+            if(currentNote?._id) {
+                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, { method: 'DELETE' });
             };
 
             createNote();

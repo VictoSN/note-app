@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
 import "./NoteList.css";
 
-function NoteList({ note, setNote }) {
-    const [notes, setNotes] = useState([]);
-    
-    const loadNotes = async () => {
-        const res = await fetch('http://localhost:3000/notes', { method: 'GET' });
-        setNotes(await res.json()); 
-    };
-
-    useEffect(() => {
-        loadNotes();
-    }, [ note ])
-
+function NoteList({ notes, setNote }) {    
     return (
        <div id="NoteList">
-            {notes.map((note) => (
-                <div className="noteCard" onClick={() => setNote(note)} key ={note._id}>
-                    <div className="noteCardDetail">{note.title} {note.category}</div>
-                    {note.favorite ? "⭐" : ""}
+            {notes.map((notes) => (
+                <div className="noteCard" onClick={() => setNote(notes)} key ={notes._id}>
+                    <div className="noteCardDetail">{notes.title} {notes.category}</div>
+                    {notes.favorite ? "⭐" : ""}
                 </div>
             ))}
         </div>
