@@ -1,4 +1,40 @@
-#SearchBar {
+#SearchBar { 
+    padding: 12px; 
+    display: flex; 
+    flex-direction: column; 
+    
+    gap: 8px; 
+    border-bottom: 1px solid var(--border); 
+}
+
+#SearchBar input, #SearchBar select { 
+    width: 100%; 
+    padding: 6px 10px; 
+
+    border: 1px solid var(--input-border); 
+    border-radius: 6px; 
+    font-size: 0.9em; 
+
+    background: var(--input-bg);
+    color: var(--text);
+}
+
+.filterDiv {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.catFilter { flex: 8 }
+
+.favFilter { 
+    flex: 1;
+    height: 25px;
+    cursor: pointer;
+}
+
+.svg {
+    width: 22px;
+    height: 22px;
 }

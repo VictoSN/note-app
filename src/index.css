@@ -1,7 +1,32 @@
-body {
-  margin: 0;  
-  min-height: 100svh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+:root {
+    --bg: #f5f5f5;
+    --bg-secondary: #fafafa;
+    --text: #222;
+    --text-muted: #888;
+    --border: #e0e0e0;
+    --card-hover: #f0f0f0;
+    --input-border: #ddd;
+  }
+  
+  .dark {
+    --bg: #121212;
+    --bg-secondary: #1e1e1e;
+    --text: #eee;
+    --text-muted: #aaa;
+    --border: #333;
+    --card-hover: #2a2a2a;
+    --input-border: #444;
+}
+
+body { 
+  height: 100dvh; 
+  font-family: sans-serif; 
+  background: var(--bg);
+  color: var(--text);
 }

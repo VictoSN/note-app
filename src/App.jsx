@@ -9,10 +9,12 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [filterCategory, setFilterCategory] = useState("");
+  const [showFavorites, setShowFavorites] = useState(false);
 
   const filteredNotes = notes
   .filter(note => note.title.toLowerCase().includes(search.toLowerCase()))
-  .filter(note => filterCategory ? note.category === filterCategory : true);
+  .filter(note => filterCategory ? note.category === filterCategory : true)
+  .filter(note => showFavorites ? note.favorite === true : true);
 
   // Categories are a set of note.category
   const categories = [...new Set(notes.map(n => n.category).filter(Boolean))]
@@ -46,13 +48,16 @@ function App() {
 
   return (
     <div id="mainDiv">
-      <div id="leftColumn">
-        <SearchBar 
-          search={search} setSearch={setSearch} categories={categories}
-          filterCategory={filterCategory} setFilterCategory={setFilterCategory} />
-        <NoteList notes={filteredNotes} setNote={setCurrentNote} />
-      </div>
-      <NoteEditor currentNote={currentNote} setNote={updateNote} onDelete={deleteNote} />
+        <div id="leftColumn">
+          <SearchBar 
+            search={search} setSearch={setSearch} categories={categories}
+            filterCategory={filterCategory} setFilterCategory={setFilterCategory} 
+            showFavorites={showFavorites} setShowFavorites={setShowFavorites} />
+          <NoteList notes={filteredNotes} setNote={setCurrentNote} />
+        </div>
+        <div id="rightColumn">
+          <NoteEditor currentNote={currentNote} setNote={updateNote} onDelete={deleteNote} />
+        </div>
     </div>
   )
 }

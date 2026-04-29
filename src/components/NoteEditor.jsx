@@ -1,11 +1,31 @@
 import { useState, useEffect } from "react";  
 import './NoteEditor.css';        
+import whiteStar from "../assets/star-white.svg";
+import yellowStar from "../assets/star-yellow.svg";
+import moon from "../assets/moon.svg";
+import sun from "../assets/sun.svg";
 
 function NoteEditor({ currentNote, setNote, onDelete }) {
     const [noteTitle, setNoteTitle] = useState("");
     const [noteFavorite, setNoteFavorite] = useState(false);
     const [noteCategory, setNoteCategory] = useState("");
     const [noteContent, setNoteContent] = useState("");
+    const [darkMode, setDarkMode] = useState(false);
+
+    // change the body's class into dark mode
+    useEffect(() => {
+        document.body.className = darkMode ? "dark" : "";
+    }, [darkMode]);
+
+    useEffect(() => {
+        localStorage.setItem("displayMode", darkMode);
+    }, [darkMode]);
+
+    // localStorage stores strings, need some logic to avoid permanent dark mode
+    useEffect(() => {
+        const saved = localStorage.getItem("displayMode");
+        if (saved !== null) setDarkMode(saved === "true");
+    }, []);
 
     // Sync local state when a different note is selected
     useEffect(() => {
@@ -26,20 +46,38 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
 
     // Update the UI then persist to db
     const favoriteNote = async () => {
+        if(!noteTitle.trim()) return;
+        
         const newFavorite = !noteFavorite;
         setNoteFavorite(newFavorite);
-        setNote({ ...currentNote, favorite: newFavorite });
-
+        
         try {
-            if(currentNote?._id) {
-                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
-                    method: 'PATCH',
+            if(!currentNote?._id) {
+                // New note, POST with favorite already set
+                const res = await fetch(`http://localhost:3000/notes`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        favorite: newFavorite
+                            title: noteTitle,
+                            favorite: newFavorite,
+                            category: noteCategory,
+                            content: noteContent
                     })
-                })
+                });
+    
+                const newNote = await res.json();
+                setNote(newNote);
+                return;  
             }
+
+            await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    favorite: newFavorite
+                })
+            });
+            setNote({ ...currentNote, favorite: newFavorite });
         } catch (err) {
             console.log(err);
         }
@@ -47,6 +85,7 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
 
     // Save to db. PATCH if exist, POST if not exist.
     const saveNote = async () => {
+        if(!noteTitle.trim()) return;
         try {
             if(currentNote?._id) {
                 await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
@@ -114,6 +153,8 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
 
     // POST current content as a new one
     const duplicateNote = async () => {
+        if(!noteTitle.trim()) return;
+
         try {
             const res = await fetch(`http://localhost:3000/notes`, {
                 method: 'POST',
@@ -133,20 +174,26 @@ function NoteEditor({ currentNote, setNote, onDelete }) {
         }
     }
 
-    const changeDisplayMode = () => {
-        setDisplayMode(prev => !prev);
-    };
-
     return (
         <div id="NoteEditor">
             <section className="controlSection">
-                <input value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Title'></input>
-                <button onClick={favoriteNote}>{noteFavorite ? "Unfavorite" : "Favorite"}</button>
-                <input value={noteCategory} onChange={(e) => setNoteCategory(e.target.value)} placeholder="Category"></input>
-                <button onClick={saveNote}>Save</button>
-                <button onClick={removeNote}>Delete</button>
-                <button onClick={createNote}>New</button>
-                <button onClick={duplicateNote}>Duplicate</button>
+                <div className="controlDiv">
+                    <input value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} placeholder='Title'></input>
+                    <button className="favButton" onClick={favoriteNote}>
+                        <img className="svg" src={noteFavorite ? yellowStar : whiteStar} alt="star"></img>
+                    </button>
+                    <input value={noteCategory} onChange={(e) => setNoteCategory(e.target.value)} placeholder="Category"></input>
+                </div>
+                
+                <div className="controlDiv">
+                    <button className="savButton" onClick={saveNote}>Save</button>
+                    <button className="delButton" onClick={removeNote}>Delete</button>
+                    <button className="newButton" onClick={createNote}>New</button>
+                    <button className="dupButton" onClick={duplicateNote}>Duplicate</button>
+                    <button className={darkMode ? "darkButton" : "lightButton"} onClick={() => setDarkMode(!darkMode)}>
+                        <img className="svg" src={darkMode ? moon : sun} alt="Dark mode logo"></img>
+                    </button>
+                </div>
             </section>
             <textarea className="textContent" value={noteContent} onChange={(e) => setNoteContent(e.target.value)} placeholder='Insert note here'></textarea>
         </div>

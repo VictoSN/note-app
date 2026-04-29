@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./NoteList.css";
+import yellowStar from "../assets/star-yellow.svg";
 
 function NoteList({ notes, setNote }) {    
     // When a note card is clicked, it will update the note editor by using setNote(notes)
@@ -11,7 +12,7 @@ function NoteList({ notes, setNote }) {
                         <h1>{notes.title}</h1>
                         <h2>{notes.category}</h2>
                     </div>
-                    {notes.favorite ? "⭐" : ""}
+                    <img className="svg" src={yellowStar} style={{ display: notes.favorite ? "block" : "none"}} alt="star"></img>
                 </div>
             ))}
         </div>
