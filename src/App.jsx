@@ -5,8 +5,13 @@ import NoteList from './components/NoteList'
 import NoteEditor from './components/NoteEditor'
 
 function App() {
+  // Fetch the initial data from db
+  const [notes, setNotes] = useState(() => {
+    const data = JSON.parse(localStorage.getItem("notes"));
+    return Array.isArray(data) ? data : [];
+  }, []);
+
   const [search, setSearch] = useState("");
-  const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [filterCategory, setFilterCategory] = useState("");
   const [showFavorites, setShowFavorites] = useState(false);
@@ -31,9 +36,9 @@ function App() {
       setCurrentNote(null)
       return
     }
-    if(notes.find(n => n._id === updatedNote._id)) {
+    if(notes.find(n => n.id === updatedNote.id)) {
       // existing note, then update it
-      setNotes(prev => prev.map(n => n._id === updatedNote?._id ? updatedNote : n));
+      setNotes(prev => prev.map(n => n.id === updatedNote?.id ? updatedNote : n));
     } else {
       // new note (add/duplicate), add it to the note list
       setNotes(prev => [...prev, updatedNote]);
@@ -41,16 +46,14 @@ function App() {
   }
 
   const deleteNote = (deleteId) => {
-    setNotes(prev => prev.filter(n => n._id !== deleteId));
+    setNotes(prev => prev.filter(n => n.id !== deleteId));
     setCurrentNote(null)
   }
 
-  // Fetch the data from the database to stay in sync
+  // Update the data into localStorage
   useEffect(() => {
-    fetch('http://localhost:3000/notes')
-      .then(res => res.json())
-      .then(data => setNotes(data))
-  }, [])
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   return (
     <div id="mainDiv">

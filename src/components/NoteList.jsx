@@ -7,7 +7,7 @@ function NoteList({ notes, setNote }) {
     return (
        <div id="NoteList">
             {notes.map((note) => (
-                <div className="noteCard" onClick={() => setNote(note)} key ={note._id}>
+                <div className="noteCard" onClick={() => setNote(note)} key ={note.id}>
                     <div className="noteCardDetail">
                         <h1>{note.title}</h1>
                         <h2>{note.category}</h2>

@@ -6,6 +6,7 @@ import moon from "../assets/moon.svg";
 import sun from "../assets/sun.svg";
 
 function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
+    const [noteId, setNoteId] = useState(crypto.randomUUID())
     const [noteTitle, setNoteTitle] = useState("");
     const [noteFavorite, setNoteFavorite] = useState(false);
     const [noteCategory, setNoteCategory] = useState("");
@@ -29,6 +30,7 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
     useEffect(() => {
         if(!currentNote) {
             // Reset editor when null
+            setNoteId(crypto.randomUUID())
             setNoteTitle("")
             setNoteFavorite(false)
             setNoteCategory("")
@@ -36,6 +38,7 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
             return
         }
 
+        setNoteId(currentNote.id || crypto.randomUUID());
         setNoteTitle(currentNote.title || "");
         setNoteFavorite(currentNote.favorite || false);
         setNoteCategory(currentNote.category || "");
@@ -50,31 +53,18 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
         setNoteFavorite(newFavorite);
         
         try {
-            if(!currentNote?._id) {
-                // New note, POST with favorite already set
-                const res = await fetch(`http://localhost:3000/notes`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                            title: noteTitle,
-                            favorite: newFavorite,
-                            category: noteCategory,
-                            content: noteContent
-                    })
-                });
-    
-                const newNote = await res.json();
+            if(!currentNote?.id) {
+                // New note, POST with favorite already set    
+                const newNote = ({
+                    id: noteId,
+                    title: noteTitle,
+                    favorite: noteFavorite,
+                    category: noteCategory,
+                    content: noteContent
+                })
                 setNote(newNote);
                 return;  
             }
-
-            await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    favorite: newFavorite
-                })
-            });
             setNote({ ...currentNote, favorite: newFavorite });
         } catch (err) {
             console.log(err);
@@ -85,18 +75,7 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
     const saveNote = async () => {
         if(!noteTitle.trim()) return;
         try {
-            if(currentNote?._id) {
-                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                            title: noteTitle,
-                            favorite: noteFavorite,
-                            category: noteCategory,
-                            content: noteContent
-                    })
-                });
-
+            if(currentNote?.id) {
                 // Update parent so noteList can immediately change
                 setNote({ 
                     ...currentNote, 
@@ -105,18 +84,13 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
                     content: noteContent
                 });
             } else {
-                const res = await fetch(`http://localhost:3000/notes`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                            title: noteTitle,
-                            favorite: noteFavorite,
-                            category: noteCategory,
-                            content: noteContent
-                    })
-                });
-    
-                const newNote = await res.json();
+                const newNote = ({
+                    id: noteId,
+                    title: noteTitle,
+                    favorite: noteFavorite,
+                    category: noteCategory,
+                    content: noteContent
+                })
                 setNote(newNote);
                 return;
             }
@@ -128,9 +102,8 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
     // Delete from database and clear the editor to blank
     const removeNote = async () => {
         try {
-            if(currentNote?._id) {
-                await fetch(`http://localhost:3000/notes/${currentNote?._id}`, { method: 'DELETE' });
-                onDelete(currentNote._id);
+            if(currentNote?.id) {
+                onDelete(currentNote.id);
             } else {
                 createNote();
             }
@@ -143,6 +116,7 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
     const createNote = () => {
         setNote(null);
 
+        setNoteId(crypto.randomUUID());
         setNoteTitle("");
         setNoteFavorite(false);
         setNoteCategory("");
@@ -154,18 +128,13 @@ function NoteEditor({ currentNote, setNote, onDelete, setMobileView }) {
         if(!noteTitle.trim()) return;
 
         try {
-            const res = await fetch(`http://localhost:3000/notes`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                        title: noteTitle,
-                        favorite: noteFavorite,
-                        category: noteCategory,
-                        content: noteContent
-                })
-            });
-    
-            const newNote = await res.json();
+            const newNote = ({
+                id: crypto.randomUUID(),
+                title: noteTitle,
+                favorite: noteFavorite,
+                category: noteCategory,
+                content: noteContent
+            })
             setNote(newNote);
         } catch (err) {
             console.log(err);

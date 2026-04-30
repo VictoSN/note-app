@@ -1,14 +1,10 @@
 # note-app
 
-## A note-app that is created using MERN tech stack
-
-a MongoDB, Express, React, Node (MERN) javascript project that is utilized for the following functions:
-
+A note-app that is created using react and localStorage, a simpler version of the MERN techstack. Contains the following functionalities:
 1. Adding / Deleting Notes
 2. Categories and Favorites Notes
 3. Light & Dark UIs
-4. Stored in MongoAtlas
-5. Used REST API along with Express and Node.js
+4. Stored in localStorage
 
 ## How it works
 - Contains 3 components (Search, List, Editor)
@@ -41,25 +37,13 @@ a MongoDB, Express, React, Node (MERN) javascript project that is utilized for t
 
 ## How to run
 1. Clone the repo
+
 2. Run:
-
-```bash
-npm install
-```
-
-3. Create .env with:
-
-```bash
-MONGO_URI=connection_string
-```
-
-4. Run:
-
-```bash
-node src/server/index.js
-```
-
-5. Run:
 ```bash
 npm run dev
 ```
+
+3. Open the link provided in the localhost
+
+## License
+This project is licensed under the [MIT License](LICENSE)
