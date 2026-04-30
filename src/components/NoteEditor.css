@@ -33,7 +33,7 @@
     border-radius: 6px; 
     cursor: pointer; 
     transition: filter 0.2s;
-    background-color: transparent;
+    background: var(--input-bg);
     border: 1px solid var(--input-border);
 }
 

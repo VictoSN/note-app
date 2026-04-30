@@ -17,14 +17,27 @@ a MongoDB, Express, React, Node (MERN) javascript project that is utilized for t
 - Stores UI preferences in localStorage
 
 ## Screenshots
+### Default Interface
+![Default](public/sample/Default.png)
+
 ### Main Interface
-![Main Interface](images/Main.png)
+![Main Interface](public/sample/Main.png)
 
-### Example-Editor
-![Note Editor](images/Example-Editor.png)
+### Dark Mode
+![Dark Mode](public/sample/Example-Dark.png)
 
-### Example-Search
-![Search](images/Example-Search.png)
+### Search
+![Search](public/sample/Example-Search.png)
+
+### Mobile View 1
+<p align="center">
+  <img src="public/sample/Example-Mobile-1.png" width="280">
+</p>
+
+### Mobile View 2
+<p align="center">
+  <img src="public/sample/Example-Mobile-2.png" width="280">
+</p>
 
 ## How to run
 1. Clone the repo
