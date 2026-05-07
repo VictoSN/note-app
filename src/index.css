@@ -24,6 +24,10 @@
     --input-border: #444;
 }
 
+body, div, section, header, footer {
+  transition: all 0.3s ease;
+}
+
 body { 
   height: 100dvh; 
   font-family: sans-serif; 
